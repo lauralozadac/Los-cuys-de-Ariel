@@ -152,10 +152,10 @@ TextureImporter:
       name: Aa Bocetos_0
       rect:
         serializedVersion: 2
-        x: 1131
-        y: 2043
-        width: 194
-        height: 457
+        x: 285
+        y: 3651
+        width: 288
+        height: 338
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,10 +174,10 @@ TextureImporter:
       name: Aa Bocetos_1
       rect:
         serializedVersion: 2
-        x: 1261
-        y: 2207
-        width: 288
-        height: 339
+        x: 1055
+        y: 3639
+        width: 190
+        height: 329
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -196,10 +196,10 @@ TextureImporter:
       name: Aa Bocetos_2
       rect:
         serializedVersion: 2
-        x: 1589
-        y: 1957
-        width: 262
-        height: 614
+        x: 1725
+        y: 3575
+        width: 194
+        height: 456
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,10 +218,10 @@ TextureImporter:
       name: Aa Bocetos_3
       rect:
         serializedVersion: 2
-        x: 1805
-        y: 2209
-        width: 190
-        height: 329
+        x: 2289
+        y: 3419
+        width: 260
+        height: 614
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -240,10 +240,10 @@ TextureImporter:
       name: Aa Bocetos_4
       rect:
         serializedVersion: 2
-        x: 1887
-        y: 1603
-        width: 658
-        height: 708
+        x: 3031
+        y: 3574
+        width: 164
+        height: 369
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -259,101 +259,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aa Bocetos_5
-      rect:
-        serializedVersion: 2
-        x: 2203
-        y: 2271
-        width: 342
-        height: 270
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0331dbedde10b044a8a842b587a805f2
-      internalID: 79976367
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Aa Bocetos_6
-      rect:
-        serializedVersion: 2
-        x: 2645
-        y: 2099
-        width: 318
-        height: 358
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 921afe24851b4fd4b8446ae08e7711c7
-      internalID: -732932590
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Aa Bocetos_7
-      rect:
-        serializedVersion: 2
-        x: 1141
-        y: 1525
-        width: 176
-        height: 416
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: abd77f3c1bb3709419e56d64f69868b8
-      internalID: 728912401
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Aa Bocetos_8
-      rect:
-        serializedVersion: 2
-        x: 1285
-        y: 1597
-        width: 240
-        height: 408
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d3388531e4901594a9ea735f736f298d
-      internalID: 379577994
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Aa Bocetos_9
       rect:
         serializedVersion: 2
-        x: 1547
-        y: 1531
-        width: 384
-        height: 404
+        x: 157
+        y: 2570
+        width: 656
+        height: 707
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -372,10 +284,10 @@ TextureImporter:
       name: Aa Bocetos_10
       rect:
         serializedVersion: 2
-        x: 2565
-        y: 1841
-        width: 166
-        height: 370
+        x: 1243
+        y: 2725
+        width: 384
+        height: 407
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -394,10 +306,10 @@ TextureImporter:
       name: Aa Bocetos_11
       rect:
         serializedVersion: 2
-        x: 2851
-        y: 1591
-        width: 112
-        height: 344
+        x: 2045
+        y: 2739
+        width: 344
+        height: 272
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -408,6 +320,94 @@ TextureImporter:
       bones: []
       spriteID: b7ca7111d58c8fd4fa60dc4547c4e1f7
       internalID: -1297634267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aa Bocetos_12
+      rect:
+        serializedVersion: 2
+        x: 2977
+        y: 2725
+        width: 114
+        height: 342
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2420ec4ba9368dc4abdb532a7e031918
+      internalID: 701191893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aa Bocetos_13
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 1839
+        width: 176
+        height: 414
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f57e29ee3a2cecd4ab0622916cb2be40
+      internalID: 1777184196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aa Bocetos_14
+      rect:
+        serializedVersion: 2
+        x: 1149
+        y: 1841
+        width: 318
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5063ba0290cc14a47ad63884f9ddcd5a
+      internalID: -259869092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aa Bocetos_15
+      rect:
+        serializedVersion: 2
+        x: 2097
+        y: 1789
+        width: 238
+        height: 408
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f12c50d712c33e42b056105e5ed931a
+      internalID: -69932264
       vertices: []
       indices: 
       edges: []
@@ -432,6 +432,10 @@ TextureImporter:
       Aa Bocetos_1: 1355170225
       Aa Bocetos_10: 1901235046
       Aa Bocetos_11: -1297634267
+      Aa Bocetos_12: 701191893
+      Aa Bocetos_13: 1777184196
+      Aa Bocetos_14: -259869092
+      Aa Bocetos_15: -69932264
       Aa Bocetos_2: 2034780444
       Aa Bocetos_3: 1595137921
       Aa Bocetos_4: 550600281
