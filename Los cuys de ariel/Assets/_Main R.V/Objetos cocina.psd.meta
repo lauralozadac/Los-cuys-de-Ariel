@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3f72c48a97cf17e4cb7769af9b3a9087
+guid: d6bf11f50c6d59549874ed068bbabbd2
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -149,211 +149,387 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_0"
+      name: Objetos cocina_0
       rect:
         serializedVersion: 2
-        x: 104
-        y: 1324
-        width: 453
-        height: 1139
+        x: 174
+        y: 1938
+        width: 268
+        height: 563
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab759722aa29e27499021ddc26cdd9c3
-      internalID: -1390894759
+      spriteID: da161d810bf29844294c232e020ae65c
+      internalID: 1383026667
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_1"
+      name: Objetos cocina_1
       rect:
         serializedVersion: 2
-        x: 681
-        y: 1470
-        width: 679
-        height: 825
+        x: 613
+        y: 1944
+        width: 412
+        height: 564
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab7f17f744b67a2449be52c98f4346ae
-      internalID: -1083281958
+      spriteID: 26759d8a0d8027c44bd82de11d652da9
+      internalID: -612104113
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_2"
+      name: Objetos cocina_2
       rect:
         serializedVersion: 2
-        x: 1418
-        y: 1485
-        width: 635
-        height: 927
+        x: 1265
+        y: 1938
+        width: 488
+        height: 549
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d60fd74bb74b47d4d9e0c036dbf7f720
-      internalID: -1102500266
+      spriteID: 26b99e6306ecb4d45b5f681633b70ff0
+      internalID: -1171337848
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_3"
+      name: Objetos cocina_3
       rect:
         serializedVersion: 2
-        x: 2141
-        y: 1565
-        width: 547
-        height: 576
+        x: 1897
+        y: 2096
+        width: 323
+        height: 439
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 01230e89814945b4a87edf682d7c9803
-      internalID: 677098984
+      spriteID: 5e66621271c151e4191ed31aa1b28fd0
+      internalID: -1016567047
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_4"
+      name: Objetos cocina_4
       rect:
         serializedVersion: 2
-        x: 2805
-        y: 1550
-        width: 628
-        height: 825
+        x: 2227
+        y: 1917
+        width: 357
+        height: 295
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40b6edb095974a34cba5dee97742da82
-      internalID: 416911302
+      spriteID: 4be8b5366e1a23b4d8cee9dd870868c2
+      internalID: -1721107821
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_5"
+      name: Objetos cocina_5
       rect:
         serializedVersion: 2
-        x: 2236
-        y: 915
-        width: 336
-        height: 431
+        x: 78
+        y: 1354
+        width: 556
+        height: 556
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 645445a30ad33934a9c34149c2693684
-      internalID: -1225736848
+      spriteID: a90faf1deb4ff4b488a049161b94b7d8
+      internalID: 1446832341
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_6"
+      name: Objetos cocina_6
       rect:
         serializedVersion: 2
-        x: 2863
-        y: 171
-        width: 431
-        height: 824
+        x: 799
+        y: 1361
+        width: 515
+        height: 549
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 20c8d8839a0679c459fcd287aac37a06
-      internalID: -624844112
+      spriteID: 47c1d1642e0b9654f9ec8b9eda9e68d1
+      internalID: 792041392
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_7"
+      name: Objetos cocina_7
       rect:
         serializedVersion: 2
-        x: 97
-        y: 171
-        width: 431
-        height: 897
+        x: 1451
+        y: 1375
+        width: 391
+        height: 501
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 015597a99a6ae0140a7c93f600b03463
-      internalID: 751904705
+      spriteID: 8b707c3cda16dc745a33459843cba0fc
+      internalID: 1004856688
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_8"
+      name: Objetos cocina_8
       rect:
         serializedVersion: 2
-        x: 732
-        y: 360
-        width: 657
-        height: 628
+        x: 1945
+        y: 1471
+        width: 254
+        height: 391
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 41bff2c7022b07340afca5c48eb69cc2
-      internalID: 731517964
+      spriteID: 112675b8735b3ab4783388e7ccdccf8e
+      internalID: 1165988077
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Ilustracio\u0301n_sin_ti\u0301tulo 87_9"
+      name: Objetos cocina_9
       rect:
         serializedVersion: 2
-        x: 1623
-        y: 214
-        width: 459
-        height: 650
+        x: 2268
+        y: 1347
+        width: 378
+        height: 501
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e8e6e9fb6788234392e992a9d4418a4
+      internalID: 46674144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Objetos cocina_10
+      rect:
+        serializedVersion: 2
+        x: 2858
+        y: 1278
+        width: 309
+        height: 653
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 186602297ac27964084ce7beab2c1527
+      internalID: 522530560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Objetos cocina_11
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 640
+        width: 446
+        height: 632
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e6f7acc03946e340982f1a87dfbecb3
+      internalID: -783175745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Objetos cocina_12
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 832
+        width: 659
+        height: 426
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8462d4e97275d5540a77ff6642d0ad1b
+      internalID: -195384157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Objetos cocina_13
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 221
+        width: 247
+        height: 288
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0890fe2f3549e1042b6306c11c87bc6a
+      internalID: 2145272448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Objetos cocina_14
+      rect:
+        serializedVersion: 2
+        x: 1417
+        y: 660
+        width: 460
+        height: 680
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b26b0a17bed405418a1efd2fd490436
+      internalID: -1287880005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Objetos cocina_15
+      rect:
+        serializedVersion: 2
+        x: 2014
+        y: 763
+        width: 604
+        height: 392
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f7c6c04223f6b844a2bc12f2b81182d
+      internalID: -971320944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Objetos cocina_16
+      rect:
+        serializedVersion: 2
+        x: 2261
+        y: 77
+        width: 927
+        height: 618
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cefcf62827fc9c40b6b14968910e3fd
+      internalID: 113087592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Objetos cocina_17
+      rect:
+        serializedVersion: 2
+        x: 2028
+        y: 1182
+        width: 590
+        height: 151
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -362,8 +538,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d0e28f5b20574ef4d9b21662a32c227b
-      internalID: -870616656
+      spriteID: fe84cca3e77a86240b524ef720e1db22
+      internalID: 1489293815
       vertices: []
       indices: 
       edges: []
@@ -372,7 +548,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 64c5291737a27924a8cdc7203bd404ac
+    spriteID: 4b95075357d4dd44d974fc00cd903374
     internalID: 0
     vertices: []
     indices: 
@@ -382,16 +558,24 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_0": -1390894759
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_1": -1083281958
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_2": -1102500266
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_3": 677098984
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_4": 416911302
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_5": -1225736848
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_6": -624844112
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_7": 751904705
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_8": 731517964
-      "Ilustracio\u0301n_sin_ti\u0301tulo 87_9": -870616656
+      Objetos cocina_0: 1383026667
+      Objetos cocina_1: -612104113
+      Objetos cocina_10: 522530560
+      Objetos cocina_11: -783175745
+      Objetos cocina_12: -195384157
+      Objetos cocina_13: 2145272448
+      Objetos cocina_14: -1287880005
+      Objetos cocina_15: -971320944
+      Objetos cocina_16: 113087592
+      Objetos cocina_17: 1489293815
+      Objetos cocina_2: -1171337848
+      Objetos cocina_3: -1016567047
+      Objetos cocina_4: -1721107821
+      Objetos cocina_5: 1446832341
+      Objetos cocina_6: 792041392
+      Objetos cocina_7: 1004856688
+      Objetos cocina_8: 1165988077
+      Objetos cocina_9: 46674144
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
