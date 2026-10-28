@@ -3,71 +3,91 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-// Controla el flujo entre el acto 1 (río) y el acto 2 (cocina).
+// Controla el flujo de la experiencia:
 //
-//   Fin del recorrido del bote:
-//     - Con pez en el balde -> fundido a negro, el jugador aparece dentro de la casa
-//                              frente al mesón, se activa el balde de la casa,
-//                              cambia el sonido ambiente y empieza el acto 2.
-//     - Sin pez en el balde -> se reinicia la experiencia.
+//   Inicio            -> suenan los 3 diálogos seguidos (con una pausa entre ellos).
+//   Salir zona pesca 1 -> audio "pescó" o "no pescó" según el balde.
+//   Fin del recorrido:
+//     - Con pez -> suena el audio final, se espera a que termine, fundido a negro
+//                  y el jugador aparece en la casa (acto 2).
+//     - Sin pez -> se reinicia DESDE EL CHECKPOINT (antes de la primera zona de pesca),
+//                  sin repetir los diálogos del inicio.
 //
-// Conexión:
-//   BoatController > On Journey Complete -> ExperienceManager.OnJourneyComplete
+// Conexiones:
+//   Bote (On Journey Complete)            -> ExperienceManager.OnJourneyComplete
+//   Zona de pesca 1 (On Boat Exit)        -> ExperienceManager.OnFirstFishingZoneExit
+//   Zona antes de la pesca (On Boat Enter) -> NarrationManager.Enqueue (clip)
 public class ExperienceManager : MonoBehaviour
 {
     [Header("Referencias")]
     public BucketController bucket;
+    [Tooltip("El objeto que mueve el bote (la Canoa con su script de waypoints)")]
+    public MonoBehaviour boatMover;
+    public NarrationManager narration;
     [Tooltip("El rig del jugador ([BuildingBlock] Camera Rig)")]
     public Transform playerRig;
     [Tooltip("La cámara del jugador (CenterEyeAnchor). Si lo dejas vacío, usa Camera.main.")]
     public Camera playerCamera;
 
+    [Header("Audios del recorrido")]
+    [Tooltip("Los diálogos del inicio, en orden")]
+    public AudioClip[] introClips;
+    [Tooltip("Espera antes del primer diálogo (s)")]
+    public float introStartDelay = 1.5f;
+    public AudioClip caughtFishClip;      // salió de la zona 1 con pez
+    public AudioClip noFishClip;          // salió de la zona 1 sin pez (hay otra oportunidad)
+    public AudioClip finalClip;           // antes de pasar a la casa
+
+    [Header("Reinicio")]
+    [Tooltip("Número del waypoint donde reaparece el bote al reiniciar " +
+             "(un poco antes de la zona del audio previo a la pesca)")]
+    public int checkpointWaypointIndex = 0;
+    [Tooltip("Segundos antes de reiniciar cuando no hay pez. 0 = de una.")]
+    public float restartDelay = 0f;
+
     [Header("Llegada a la casa")]
-    [Tooltip("Objeto vacío dentro de la casa: posición en el piso y hacia dónde mira el jugador " +
-             "(la flecha azul apunta al mesón)")]
+    [Tooltip("Objeto vacío en el piso de la casa; la flecha azul apunta al mesón")]
     public Transform houseSpawnPoint;
-    [Tooltip("Objetos que se apagan al inicio y se encienden al llegar (ej. el balde de la casa con su pez)")]
+    [Tooltip("Se apagan al inicio y se encienden al llegar (ej. el balde de la casa)")]
     public GameObject[] enableOnArrival;
-    [Tooltip("Objetos que se apagan al llegar (ej. cosas del río que ya no se necesitan)")]
+    [Tooltip("Se apagan al llegar")]
     public GameObject[] disableOnArrival;
 
     [Header("Transición")]
-    [Tooltip("Opcional. Si no hay fader, el cambio es instantáneo.")]
     public ScreenFader fader;
     public float fadeDuration = 0.6f;
-    [Tooltip("Tiempo en negro antes de volver a aparecer (s)")]
     public float blackHoldTime = 0.3f;
 
     [Header("Sonido ambiente")]
     public AudioSource riverAmbience;
     public AudioSource houseAmbience;
-    [Tooltip("Duración del cambio de sonido río -> casa (s)")]
     public float ambienceCrossfade = 2f;
-
-    [Header("Reinicio")]
-    [Tooltip("Segundos antes de reiniciar cuando no hay pez. 0 = de una (para pruebas).")]
-    public float restartDelay = 0f;
 
     [Header("Diagnóstico")]
     public bool debugLogs = true;
 
     [Header("Eventos")]
-    [Tooltip("Se dispara cuando el jugador ya está en la casa: empieza el acto 2")]
     public UnityEvent onAct2Start;
-    [Tooltip("Para el sonido y la UI de reinicio más adelante")]
     public UnityEvent onArrivedWithoutFish;
 
+    // Sobrevive a la recarga de la escena: indica que hay que empezar en el checkpoint
+    private static bool resumeFromCheckpoint;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics() => resumeFromCheckpoint = false;  // cada Play empieza limpio
+
     private bool busy;
+    private bool firstZoneResolved;
     private float houseTargetVolume = 1f;
 
     void Start()
     {
         if (playerCamera == null) playerCamera = Camera.main;
+        if (narration == null) narration = NarrationManager.Instance;
 
         foreach (var go in enableOnArrival)
             if (go != null) go.SetActive(false);
 
-        // Sonido del río desde el inicio, el de la casa en silencio
         if (riverAmbience != null)
         {
             riverAmbience.loop = true;
@@ -81,13 +101,52 @@ public class ExperienceManager : MonoBehaviour
             houseAmbience.volume = 0f;
         }
 
+        if (resumeFromCheckpoint)
+        {
+            resumeFromCheckpoint = false;
+            StartCoroutine(ResumeAtCheckpoint());
+        }
+        else
+        {
+            StartCoroutine(PlayIntro());
+        }
+
         if (debugLogs)
         {
             if (bucket == null) Debug.LogWarning("[Experiencia] Falta asignar el balde del bote.", this);
+            if (boatMover == null) Debug.LogWarning("[Experiencia] Falta asignar el bote (Boat Mover).", this);
+            if (narration == null) Debug.LogWarning("[Experiencia] Falta el NarrationManager.", this);
             if (playerRig == null) Debug.LogWarning("[Experiencia] Falta asignar el rig del jugador.", this);
-            if (houseSpawnPoint == null) Debug.LogWarning("[Experiencia] Falta asignar el punto de aparición en la casa.", this);
-            if (playerCamera == null) Debug.LogWarning("[Experiencia] No encontré la cámara del jugador.", this);
+            if (houseSpawnPoint == null) Debug.LogWarning("[Experiencia] Falta el punto de aparición en la casa.", this);
         }
+    }
+
+    // ---------- Inicio ----------
+
+    private IEnumerator PlayIntro()
+    {
+        if (introStartDelay > 0f) yield return new WaitForSeconds(introStartDelay);
+        if (narration != null && introClips != null) narration.EnqueueMany(introClips);
+    }
+
+    private IEnumerator ResumeAtCheckpoint()
+    {
+        yield return null;  // esperamos un frame para que el bote ya haya hecho su Start
+        if (boatMover != null)
+            boatMover.SendMessage("JumpToWaypoint", checkpointWaypointIndex, SendMessageOptions.RequireReceiver);
+        if (debugLogs) Debug.Log($"[Experiencia] Reinicio: el bote empieza en el waypoint {checkpointWaypointIndex}.", this);
+    }
+
+    // ---------- Primera zona de pesca ----------
+
+    public void OnFirstFishingZoneExit()
+    {
+        if (firstZoneResolved) return;
+        firstZoneResolved = true;
+
+        bool caught = bucket != null && bucket.HasFish;
+        if (debugLogs) Debug.Log($"[Experiencia] Salió de la zona 1. ¿Pescó? {caught}", this);
+        if (narration != null) narration.Enqueue(caught ? caughtFishClip : noFishClip);
     }
 
     // ---------- Fin del recorrido ----------
@@ -103,7 +162,14 @@ public class ExperienceManager : MonoBehaviour
 
     private IEnumerator GoToHouse()
     {
-        if (debugLogs) Debug.Log("[Experiencia] Llegó con el pez. Pasando a la casa...", this);
+        if (debugLogs) Debug.Log("[Experiencia] Llegó con el pez. Audio final y luego a la casa.", this);
+
+        // El audio final entra a la cola y esperamos a que termine todo lo que suena
+        if (narration != null)
+        {
+            narration.Enqueue(finalClip);
+            yield return narration.WaitUntilFinished();
+        }
 
         if (fader != null) yield return fader.FadeOut(fadeDuration);
 
@@ -123,13 +189,11 @@ public class ExperienceManager : MonoBehaviour
         onAct2Start?.Invoke();
     }
 
-    // Mueve el rig para que la CABEZA del jugador quede sobre el punto de aparición
-    // mirando hacia donde apunta la flecha azul del punto.
     private void TeleportPlayer(Transform target)
     {
         if (playerRig == null || target == null) return;
 
-        playerRig.SetParent(null, true);   // deja de moverse con el bote
+        playerRig.SetParent(null, true);
 
         if (playerCamera == null)
         {
@@ -138,12 +202,9 @@ public class ExperienceManager : MonoBehaviour
         }
 
         Transform cam = playerCamera.transform;
-
-        // 1. Girar el rig para que la mirada coincida con la del punto
         float yawDelta = Mathf.DeltaAngle(cam.eulerAngles.y, target.eulerAngles.y);
         playerRig.RotateAround(cam.position, Vector3.up, yawDelta);
 
-        // 2. Mover el rig para que la cabeza quede sobre el punto (el piso del rig a la altura del punto)
         Vector3 headOffset = cam.position - playerRig.position;
         headOffset.y = 0f;
         playerRig.position = target.position - headOffset;
@@ -176,16 +237,30 @@ public class ExperienceManager : MonoBehaviour
 
     private IEnumerator RestartRoutine()
     {
-        if (debugLogs) Debug.Log("[Experiencia] Llegó sin pez. Reiniciando...", this);
+        if (debugLogs) Debug.Log("[Experiencia] Llegó sin pez. Reiniciando desde el checkpoint...", this);
         onArrivedWithoutFish?.Invoke();
 
         if (restartDelay > 0f) yield return new WaitForSeconds(restartDelay);
         if (fader != null) yield return fader.FadeOut(fadeDuration);
 
-        RestartExperience();
+        RestartFromCheckpoint();
     }
 
-    public void RestartExperience()
+    // Recarga la escena y el bote arranca en el checkpoint (sin diálogos del inicio)
+    public void RestartFromCheckpoint()
+    {
+        resumeFromCheckpoint = true;
+        ReloadScene();
+    }
+
+    // Recarga la escena desde el principio (por si el menú lo necesita después)
+    public void RestartFromBeginning()
+    {
+        resumeFromCheckpoint = false;
+        ReloadScene();
+    }
+
+    private void ReloadScene()
     {
         int index = SceneManager.GetActiveScene().buildIndex;
         if (index < 0)
