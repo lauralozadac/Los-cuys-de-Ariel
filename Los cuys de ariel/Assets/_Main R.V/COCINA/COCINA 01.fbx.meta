@@ -3,7 +3,22 @@ guid: 3b59ae6e121a41e4fa0b45e167d8e2f1
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mesa.001
+    second: {fileID: 2100000, guid: 71bf80db990069849998ef0f1d45592f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mesa.005
+    second: {fileID: 2100000, guid: e7d51959119144b4980f13c93c3121e9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mesa.006
+    second: {fileID: 2100000, guid: dcc4c8d30dd1b184786517dc9279ff64, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
