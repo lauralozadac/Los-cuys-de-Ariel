@@ -3,104 +3,115 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-// Paso 1: lavar el pez en el lavaplatos.
-//   - El agua se abre/cierra tocando la manigueta (Poke) cuando el jugador quiera.
-//   - El lavado solo avanza si el pez está en la snap zone del lavaplatos Y el agua está abierta.
-//   - A los 3 segundos el pez queda limpio (brilla un poco), el agua se cierra sola
-//     y el paso se completa.
+// Paso 1: lavar el pez sumergiéndolo en el agua del lavaplatos.
 //
-// Conexiones:
-//   Manigueta (Poke)  When Select   -> FishWashStation.ToggleWater
-//   Snap zone         When Select   -> FishWashStation.OnFishPlaced
-//   Snap zone         When Unselect -> FishWashStation.OnFishRemoved
+// Va en un objeto "Agua_Lavaplatos" con un Box Collider (Is Trigger) que cubra
+// el volumen del agua: desde la superficie hasta el fondo del lavaplatos.
+//
+//   - Mientras el pez está dentro del agua, el lavado avanza
+//     (sirve si lo deja en la snap zone o si lo sostiene sumergido con la mano).
+//   - A los 3 segundos queda limpio: brilla un poco, suena algo y se completa el paso.
+//   - Si lo saca antes de tiempo, el conteo vuelve a empezar (se puede desactivar).
+//
+// No necesita conexiones: detecta el pez solo.
+[RequireComponent(typeof(Collider))]
 public class FishWashStation : MonoBehaviour
 {
-    [Header("Agua")]
-    [Tooltip("El chorro de agua (se prende y apaga)")]
-    public GameObject waterStream;
-    [Tooltip("Opcional: sonido del agua corriendo (AudioSource 3D en el grifo)")]
-    public AudioSource waterSound;
+    [Header("Pez")]
+    [Tooltip("El objeto raíz del pez de la cocina")]
+    public Transform fish;
 
     [Header("Lavado")]
     public float washDuration = 3f;
-    public bool closeWaterWhenWashed = true;
+    [Tooltip("Si el pez sale del agua antes de tiempo, el conteo vuelve a cero")]
+    public bool resetIfRemoved = true;
     [Tooltip("Opcional: el paso de la cocina. Si lo asignas, el lavado solo cuenta " +
              "cuando este paso está activo y al terminar lo completa.")]
     public KitchenStep step;
 
     [Header("Pez limpio")]
-    [Tooltip("El objeto raíz del pez de la cocina")]
-    public Transform fish;
     [Range(0f, 1f)] public float targetMetallic = 0.4f;
     [Range(0f, 1f)] public float targetSmoothness = 0.8f;
     [Tooltip("Tiempo en que el pez pasa de normal a brillante (s)")]
     public float shineTransition = 0.6f;
 
+    [Header("Sonido (opcional)")]
+    [Tooltip("AudioSource 3D en el lavaplatos")]
+    public AudioSource audioSource;
+    public AudioClip splashSound;    // el pez entra al agua
+    public AudioClip washedSound;    // el pez quedó limpio
+
     [Header("Diagnóstico")]
     public bool debugLogs = true;
 
     [Header("Eventos")]
-    public UnityEvent onWaterOpened;
-    public UnityEvent onWaterClosed;
+    public UnityEvent onFishEnterWater;
+    public UnityEvent onFishExitWater;
     public UnityEvent onFishWashed;
 
-    public bool IsWaterOn { get; private set; }
-    public bool IsFishInSink { get; private set; }
+    public bool IsFishInWater => fishCollidersInside > 0;
     public bool IsWashed { get; private set; }
+    public float Progress01 => Mathf.Clamp01(progress / washDuration);
 
+    private int fishCollidersInside;
     private float progress;
+
+    void Reset()
+    {
+        GetComponent<Collider>().isTrigger = true;
+    }
 
     void Start()
     {
-        IsWaterOn = false;
-        if (waterStream != null) waterStream.SetActive(false);
-        if (waterSound != null) { waterSound.loop = true; waterSound.Stop(); }
+        if (debugLogs && fish == null)
+            Debug.LogWarning("[Lavaplatos] Falta asignar el pez.", this);
     }
 
     void Update()
     {
-        if (IsWashed || !IsWaterOn || !IsFishInSink) return;
+        if (IsWashed || !IsFishInWater) return;
         if (step != null && !step.IsActive) return;
 
         progress += Time.deltaTime;
         if (progress >= washDuration) FinishWash();
     }
 
-    // ---------- Agua ----------
+    // ---------- Detección del pez en el agua ----------
 
-    public void ToggleWater() => SetWater(!IsWaterOn);
-    public void OpenWater() => SetWater(true);
-    public void CloseWater() => SetWater(false);
-
-    private void SetWater(bool on)
+    void OnTriggerEnter(Collider other)
     {
-        if (IsWaterOn == on) return;
-        IsWaterOn = on;
+        if (!IsFish(other)) return;
 
-        if (waterStream != null) waterStream.SetActive(on);
-        if (waterSound != null)
+        fishCollidersInside++;
+        if (fishCollidersInside > 1) return;   // ya estaba adentro (otro de sus colliders)
+
+        if (debugLogs) Debug.Log("[Lavaplatos] El pez entró al agua.", this);
+        if (!IsWashed) Play(splashSound);
+        onFishEnterWater?.Invoke();
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (!IsFish(other)) return;
+
+        fishCollidersInside = Mathf.Max(0, fishCollidersInside - 1);
+        if (fishCollidersInside > 0) return;   // todavía queda parte del pez adentro
+
+        if (!IsWashed && resetIfRemoved && progress > 0f)
         {
-            if (on) waterSound.Play();
-            else waterSound.Stop();
+            if (debugLogs) Debug.Log($"[Lavaplatos] Lo sacaron antes de tiempo ({progress:0.0}s). Vuelve a empezar.", this);
+            progress = 0f;
         }
-
-        if (debugLogs) Debug.Log($"[Lavaplatos] Agua {(on ? "abierta" : "cerrada")}.", this);
-        if (on) onWaterOpened?.Invoke();
-        else onWaterClosed?.Invoke();
+        else if (debugLogs)
+        {
+            Debug.Log("[Lavaplatos] El pez salió del agua.", this);
+        }
+        onFishExitWater?.Invoke();
     }
 
-    // ---------- Snap zone ----------
-
-    public void OnFishPlaced()
+    private bool IsFish(Collider other)
     {
-        IsFishInSink = true;
-        if (debugLogs) Debug.Log("[Lavaplatos] Pez en el lavaplatos.", this);
-    }
-
-    public void OnFishRemoved()
-    {
-        IsFishInSink = false;
-        if (debugLogs) Debug.Log("[Lavaplatos] Sacaron el pez del lavaplatos.", this);
+        return fish != null && (other.transform == fish || other.transform.IsChildOf(fish));
     }
 
     // ---------- Lavado ----------
@@ -108,10 +119,10 @@ public class FishWashStation : MonoBehaviour
     private void FinishWash()
     {
         IsWashed = true;
-        if (debugLogs) Debug.Log("[Lavaplatos] ¡Pez lavado!", this);
+        if (debugLogs) Debug.Log("[Lavaplatos] ¡Pez lavado! Ya se puede sacar.", this);
 
+        Play(washedSound);
         if (fish != null) StartCoroutine(Shine());
-        if (closeWaterWhenWashed) CloseWater();
 
         onFishWashed?.Invoke();
         if (step != null) step.Complete();
@@ -148,5 +159,10 @@ public class FishWashStation : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    private void Play(AudioClip clip)
+    {
+        if (audioSource != null && clip != null) audioSource.PlayOneShot(clip);
     }
 }
