@@ -20,6 +20,15 @@ public class KitchenStep : MonoBehaviour
     [Tooltip("Se apagan cuando el paso se completa")]
     public GameObject[] disableOnComplete;
 
+    [Header("Agarre por turno")]
+    [Tooltip("Objetos que NO se pueden agarrar hasta que empiece este paso. Siguen visibles.")]
+    public GameObject[] grabbableFromThisStep;
+    [Tooltip("Objetos que dejan de poderse agarrar cuando este paso se completa")]
+    public GameObject[] lockOnComplete;
+    [Tooltip("Activado: solo bloquea el agarre A DISTANCIA (de cerca con la mano se pueden agarrar). " +
+             "Desactivado: bloquea todo agarre.")]
+    public bool onlyDistanceGrab = true;
+
     [Header("Eventos")]
     public UnityEvent onStepStart;
     public UnityEvent onStepComplete;
@@ -33,6 +42,9 @@ public class KitchenStep : MonoBehaviour
     {
         foreach (var go in enableOnStart)
             if (go != null) go.SetActive(false);
+
+        foreach (var go in grabbableFromThisStep)
+            SetGrab(go, false, onlyDistanceGrab);
     }
 
     public void Begin(KitchenStepManager owner)
@@ -42,6 +54,9 @@ public class KitchenStep : MonoBehaviour
 
         foreach (var go in enableOnStart)
             if (go != null) go.SetActive(true);
+
+        foreach (var go in grabbableFromThisStep)
+            SetGrab(go, true, onlyDistanceGrab);
 
         if (startClip != null && NarrationManager.Instance != null)
             NarrationManager.Instance.Enqueue(startClip);
@@ -65,10 +80,34 @@ public class KitchenStep : MonoBehaviour
         foreach (var go in disableOnComplete)
             if (go != null) go.SetActive(false);
 
+        foreach (var go in lockOnComplete)
+            SetGrab(go, false, onlyDistanceGrab);
+
         if (manager != null && manager.debugLogs)
             Debug.Log($"[Cocina] Completado: {stepName}", this);
 
         onStepComplete?.Invoke();
         if (manager != null) manager.OnStepCompleted(this);
+    }
+
+    // Prende o apaga los componentes de agarre del Interaction SDK de un objeto.
+    // No toca las snap zones, los Poke ni los wrappers de eventos.
+    public static void SetGrab(GameObject go, bool enabled, bool onlyDistance)
+    {
+        if (go == null) return;
+
+        foreach (var b in go.GetComponentsInChildren<Behaviour>(true))
+        {
+            if (b == null) continue;
+            System.Type t = b.GetType();
+            if (t.Namespace == null || !t.Namespace.StartsWith("Oculus.Interaction")) continue;
+
+            string n = t.Name;
+            bool isGrab = n.EndsWith("GrabInteractable");   // HandGrab, Grab, DistanceGrab, DistanceHandGrab
+            if (!isGrab) continue;
+            if (onlyDistance && !n.StartsWith("Distance")) continue;
+
+            b.enabled = enabled;
+        }
     }
 }
