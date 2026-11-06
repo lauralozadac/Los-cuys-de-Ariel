@@ -1,8 +1,10 @@
 using System.Collections;
-using UnityEngine; 
+using UnityEngine;
 
 // Un pedazo que se puede voltear de un plato a la olla.
 // No hace falta ponerlo a mano: PourablePlate lo agrega solo a cada pedazo.
+//
+// IMPORTANTE: los pedazos NO deben tener Grab Interaction propia (solo el plato).
 public class PourableItem : MonoBehaviour
 {
     private enum State { OnPlate, Falling, InPot }
@@ -12,13 +14,14 @@ public class PourableItem : MonoBehaviour
     private Transform homeParent;
     private Vector3 homeLocalPos;
     private Quaternion homeLocalRot;
+    private Vector3 homeLocalScale;
     private Rigidbody rb;
     private float returnDelay = 4f;
     private float timer;
 
     public bool IsInPot => state == State.InPot;
 
-    // Guarda dónde está el pedazo en el plato, para poder devolverlo
+    // Guarda dónde está el pedazo en el plato (posición, rotación y escala) para poder devolverlo
     public void Init(PourablePlate owner, float delay)
     {
         plate = owner;
@@ -26,6 +29,7 @@ public class PourableItem : MonoBehaviour
         homeParent = transform.parent;
         homeLocalPos = transform.localPosition;
         homeLocalRot = transform.localRotation;
+        homeLocalScale = transform.localScale;
     }
 
     void Update()
@@ -60,8 +64,7 @@ public class PourableItem : MonoBehaviour
     private IEnumerator SettleInPot(PotContents pot)
     {
         yield return new WaitForSeconds(pot.settleTime);   // lo dejamos caer al fondo
-        Freeze();
-        transform.SetParent(pot.transform, true);           // ahora es parte de la olla
+        Freeze();   // queda quieto donde cayó (sin cambiar de padre, para no deformarlo)
         if (plate != null) plate.OnItemInPot(this);
     }
 
@@ -71,6 +74,7 @@ public class PourableItem : MonoBehaviour
         transform.SetParent(homeParent, false);
         transform.localPosition = homeLocalPos;
         transform.localRotation = homeLocalRot;
+        transform.localScale = homeLocalScale;   // vuelve con su tamaño original
         state = State.OnPlate;
         if (plate != null) plate.OnItemReturned(this);
     }
