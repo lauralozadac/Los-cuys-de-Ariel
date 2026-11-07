@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-// Un pedazo que se puede voltear de un plato a la olla.
+// Un pedazo que se puede voltear de un plato (o de la paila) a la olla.
 // No hace falta ponerlo a mano: PourablePlate lo agrega solo a cada pedazo.
 //
 // IMPORTANTE: los pedazos NO deben tener Grab Interaction propia (solo el plato).
@@ -53,10 +53,14 @@ public class PourableItem : MonoBehaviour
         timer = 0f;
     }
 
-    // Llamado por la olla cuando el pedazo entra
+    // Llamado por un recipiente (olla o paila) cuando el pedazo entra
     public void EnterPot(PotContents pot)
     {
         if (state != State.Falling) return;
+        // Solo cuenta el recipiente al que va este plato
+        // (evita que el guiso "entre" a la misma paila de donde sale)
+        if (plate != null && plate.pot != null && plate.pot != pot) return;
+
         state = State.InPot;
         StartCoroutine(SettleInPot(pot));
     }

@@ -1,14 +1,17 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-// Paso 4a: quitar la tapa de la olla.
-// Va en la tapa (TAPA OLLA). Cuando la tapa se aleja de su lugar más de
-// "Lift Distance", cuenta como quitada. No necesita conexiones de eventos.
+// Quitar la tapa de la olla (pasos 4a y 6d).
+// Va en la tapa (TAPA OLLA). Se pueden poner DOS de estos en la tapa:
+// uno para el paso 4a y otro para el 6d.
+//
+// Cuando su paso empieza, guarda dónde está la tapa. Si el jugador la aleja
+// más de "Lift Distance", cuenta como quitada. No necesita conexiones de eventos.
 public class PotLid : MonoBehaviour
 {
-    [Tooltip("El paso de quitar la tapa (ej. Paso_4a_Tapa)")]
+    [Tooltip("El paso de quitar la tapa (ej. Paso_4a_Tapa o Paso_6d_Destapar)")]
     public KitchenStep removeStep;
-    [Tooltip("Qué tanto hay que alejar la tapa de la olla para que cuente (m)")]
+    [Tooltip("Qué tanto hay que alejar la tapa para que cuente (m)")]
     public float liftDistance = 0.15f;
 
     [Header("Diagnóstico")]
@@ -18,18 +21,28 @@ public class PotLid : MonoBehaviour
     public UnityEvent onLidRemoved;
 
     public bool IsRemoved { get; private set; }
-    // Dónde estaba la tapa al inicio (para el paso de volver a taparla, más adelante)
+    // Dónde estaba la tapa cuando empezó su paso
     public Vector3 RestPosition { get; private set; }
 
-    void Start()
-    {
-        RestPosition = transform.position;
-    }
+    private bool armed;
 
     void Update()
     {
         if (IsRemoved) return;
-        if (removeStep != null && !removeStep.IsActive) return;
+
+        if (removeStep != null && !removeStep.IsActive)
+        {
+            armed = false;
+            return;
+        }
+
+        // Primer frame del paso: guardamos dónde está la tapa ahora
+        if (!armed)
+        {
+            RestPosition = transform.position;
+            armed = true;
+            return;
+        }
 
         if (Vector3.Distance(transform.position, RestPosition) > liftDistance)
         {
