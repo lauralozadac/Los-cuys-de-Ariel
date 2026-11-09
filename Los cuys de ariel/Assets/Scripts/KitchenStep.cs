@@ -5,14 +5,22 @@ using UnityEngine.Events;
 // El KitchenStepManager los activa en orden. Cuando el paso se cumple,
 // algo llama a Complete() y el manager pasa al siguiente.
 //
-// Pon uno por cada paso del storyboard en un objeto vac�o (ej. "Paso_1_Lavar").
+// Pon uno por cada paso del storyboard en un objeto vacío (ej. "Paso_1_Lavar").
 public class KitchenStep : MonoBehaviour
 {
     public string stepName = "Paso";
 
+    [Header("Guía para el jugador")]
+    [Tooltip("Texto que aparece en el panel de instrucciones al empezar el paso")]
+    [TextArea] public string instruction = "";
+    [Tooltip("Lo que hay que AGARRAR: brilla (pulso + contorno) mientras el paso está activo")]
+    public GameObject[] highlightObjects;
+    [Tooltip("Marcadores (TargetMarker) de DÓNDE dejarlo: aparecen solo durante el paso")]
+    public GameObject[] targetMarkers;
+
     [Header("Audios (opcionales)")]
-    public AudioClip startClip;      // instrucci�n al empezar el paso
-    public AudioClip completeClip;   // felicitaci�n al terminarlo
+    public AudioClip startClip;      // instrucción al empezar el paso
+    public AudioClip completeClip;   // felicitación al terminarlo
 
     [Header("Objetos")]
     [Tooltip("Se apagan al inicio y se encienden cuando empieza este paso")]
@@ -43,6 +51,9 @@ public class KitchenStep : MonoBehaviour
         foreach (var go in enableOnStart)
             if (go != null) go.SetActive(false);
 
+        foreach (var go in targetMarkers)
+            if (go != null) go.SetActive(false);
+
         foreach (var go in grabbableFromThisStep)
             SetGrab(go, false, onlyDistanceGrab);
     }
@@ -57,6 +68,14 @@ public class KitchenStep : MonoBehaviour
 
         foreach (var go in grabbableFromThisStep)
             SetGrab(go, true, onlyDistanceGrab);
+
+        // Guía: texto, brillo y marcadores
+        if (!string.IsNullOrWhiteSpace(instruction) && InstructionPanel.Instance != null)
+            InstructionPanel.Instance.Show(instruction);
+        foreach (var go in highlightObjects)
+            if (go != null) Highlighter.Get(go).StartHighlight();
+        foreach (var go in targetMarkers)
+            if (go != null) go.SetActive(true);
 
         if (startClip != null && NarrationManager.Instance != null)
             NarrationManager.Instance.Enqueue(startClip);
@@ -73,6 +92,12 @@ public class KitchenStep : MonoBehaviour
         if (!IsActive || IsDone) return;
         IsDone = true;
         IsActive = false;
+
+        // Apagar la guía de este paso
+        foreach (var go in highlightObjects)
+            if (go != null) Highlighter.Get(go).StopHighlight();
+        foreach (var go in targetMarkers)
+            if (go != null) go.SetActive(false);
 
         if (completeClip != null && NarrationManager.Instance != null)
             NarrationManager.Instance.Enqueue(completeClip);

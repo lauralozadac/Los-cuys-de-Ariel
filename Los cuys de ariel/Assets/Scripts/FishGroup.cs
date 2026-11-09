@@ -16,6 +16,9 @@ public class FishGroup : MonoBehaviour
     [Tooltip("Desfase máximo entre peces al arrancar (s). Más alto = saltos más repartidos.")]
     public float maxStagger = 3f;
 
+    [Tooltip("Los peces brillan (pulso + contorno) mientras el grupo está activo")]
+    public bool highlightFish = true;
+
     [Tooltip("Muestra en la consola cuándo arranca y se detiene el grupo")]
     public bool debugLogs = true;
 
@@ -41,13 +44,19 @@ public class FishGroup : MonoBehaviour
             if (fishes[i] == null) continue;
             float baseDelay = fishes.Length > 1 ? maxStagger * i / (fishes.Length - 1) : 0f;
             fishes[i].StartJumping(baseDelay + Random.Range(0f, 0.5f));
+            if (highlightFish) Highlighter.Get(fishes[i].gameObject).StartHighlight();
         }
     }
 
     public void StopAll()
     {
         if (debugLogs) Debug.Log($"[Grupo {name}] StopAll: los peces dejan de saltar.", this);
-        foreach (var f in fishes) if (f != null) f.StopCycle();
+        foreach (var f in fishes)
+        {
+            if (f == null) continue;
+            f.StopCycle();
+            if (highlightFish) Highlighter.Get(f.gameObject).StopHighlight();
+        }
     }
 
     public int GrabbedCount()
