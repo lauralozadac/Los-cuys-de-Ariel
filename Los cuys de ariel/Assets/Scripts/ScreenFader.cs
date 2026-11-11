@@ -69,7 +69,7 @@ public class ScreenFader : MonoBehaviour
         quadRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         quadRenderer.receiveShadows = false;
 
-        mat = new Material(fadeMaterial) { renderQueue = 5000 };  // se dibuja encima de todo
+        mat = new Material(fadeMaterial) { renderQueue = 4990 };  // encima de todo, pero debajo del logo y los textos (5000)
         quadRenderer.sharedMaterial = mat;
     }
 

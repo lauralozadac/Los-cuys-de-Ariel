@@ -93,6 +93,6 @@ public class TimeSkipStep : MonoBehaviour
     {
         foreach (var r in go.GetComponentsInChildren<Renderer>(true))
             foreach (var m in r.materials)
-                m.renderQueue = 5001;
+                m.renderQueue = 5000;   // 5000 es el máximo que dibuja URP; el fundido está en 4990
     }
 }
