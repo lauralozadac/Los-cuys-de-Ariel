@@ -1,39 +1,41 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-// Pasos 3a, 3b y 3c: condimentar el pez.
-// Va en cada frasco (salero, achote, Maggi).
+// Pasos de condimentar (sal, achote, Maggi, aceite).
+// Va en cada frasco. Un mismo frasco puede tener DOS de estos (uno para el pez y otro para la paila).
 //
-// El condimento cuenta como aplicado cuando el frasco est· BOCA ABAJO y su boca
-// est· dentro de la zona sobre el plato durante "Required Time" segundos.
-// No necesita conexiones de eventos.
+// El condimento cuenta como aplicado cuando el frasco est√° BOCA ABAJO y su boca
+// est√° dentro de la zona durante "Required Time" segundos.
+// No necesita conexiones de eventos. 
 public class Condiment : MonoBehaviour
 {
     public string condimentName = "Sal";
     [Tooltip("El paso de este condimento (ej. Paso_3a_Sal)")]
     public KitchenStep step;
 
-    [Header("DÛnde se echa")]
-    [Tooltip("Box Collider sobre el plato del pez. Puede ser el mismo para los 3 frascos.")]
+    [Header("D√≥nde se echa")]
+    [Tooltip("Box Collider sobre el plato o la paila.")]
     public BoxCollider seasoningZone;
-    [Tooltip("Punto en la boca del frasco. Si lo dejas vacÌo, usa el centro del frasco.")]
+    [Tooltip("Punto en la boca del frasco. Si lo dejas vac√≠o, usa el centro del frasco.")]
     public Transform spout;
-    [Tooltip("Hacia dÛnde apunta la boca del frasco en sus ejes locales (normalmente arriba = Y)")]
+    [Tooltip("Hacia d√≥nde apunta la boca del frasco en sus ejes locales (normalmente arriba = Y)")]
     public Vector3 localOpeningAxis = Vector3.up;
 
-    [Header("InclinaciÛn")]
-    [Tooltip("¡ngulo a partir del cual el frasco est· 'boca abajo' (grados). 90 = acostado.")]
+    [Header("Inclinaci√≥n")]
+    [Tooltip("√Ångulo a partir del cual el frasco est√° 'boca abajo' (grados). 90 = acostado.")]
     public float pourAngle = 100f;
     [Tooltip("Segundos echando condimento para que cuente")]
     public float requiredTime = 1f;
 
     [Header("Efectos (opcionales)")]
-    [Tooltip("PartÌculas que caen mientras el frasco est· inclinado")]
+    [Tooltip("Part√≠culas que caen mientras el frasco est√° inclinado")]
     public ParticleSystem particles;
+    [Tooltip("AudioSource 3D en el frasco con el sonido de echar condimento. Suena mientras se inclina.")]
+    public AudioSource pourLoop;
     public AudioSource audioSource;
     public AudioClip doneSound;
 
-    [Header("DiagnÛstico")]
+    [Header("Diagn√≥stico")]
     public bool debugLogs = true;
 
     [Header("Eventos")]
@@ -47,8 +49,9 @@ public class Condiment : MonoBehaviour
     {
         if (spout == null) spout = transform;
         if (particles != null) particles.Stop();
+        if (pourLoop != null) { pourLoop.loop = true; pourLoop.playOnAwake = false; pourLoop.Stop(); }
         if (debugLogs && seasoningZone == null)
-            Debug.LogWarning($"[Condimento {condimentName}] Falta asignar la zona sobre el plato.", this);
+            Debug.LogWarning($"[Condimento {condimentName}] Falta asignar la zona.", this);
     }
 
     void Update()
@@ -56,11 +59,16 @@ public class Condiment : MonoBehaviour
         bool active = step == null || step.IsActive;
         bool pouring = !IsDone && active && IsTilted();
 
-        // PartÌculas mientras est· inclinado (solo en su turno)
+        // Part√≠culas y sonido mientras est√° inclinado (solo en su turno)
         if (particles != null)
         {
             if (pouring && !particles.isPlaying) particles.Play();
             else if (!pouring && particles.isPlaying) particles.Stop();
+        }
+        if (pourLoop != null)
+        {
+            if (pouring && !pourLoop.isPlaying) pourLoop.Play();
+            else if (!pouring && pourLoop.isPlaying) pourLoop.Stop();
         }
 
         if (!pouring) return;
@@ -87,8 +95,9 @@ public class Condiment : MonoBehaviour
     {
         IsDone = true;
         if (particles != null) particles.Stop();
+        if (pourLoop != null) pourLoop.Stop();
         if (audioSource != null && doneSound != null) audioSource.PlayOneShot(doneSound);
-        if (debugLogs) Debug.Log($"[Condimento] °{condimentName} aplicado!", this);
+        if (debugLogs) Debug.Log($"[Condimento] ¬°{condimentName} aplicado!", this);
 
         onSeasoned?.Invoke();
         if (step != null) step.Complete();
